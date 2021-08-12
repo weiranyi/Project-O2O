@@ -26,4 +26,3 @@ use o2o
     - logger：存放日志对象
     - appender：指定输出目的地
     - layout：格式化输出
-  - 

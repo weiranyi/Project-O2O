@@ -1,2 +1,4 @@
 INSERT INTO o2o.tb_area (area_id, area_name, priority, create_time, last_edit_time) VALUES (1, '理工松林宿舍', 1, null, null);
 INSERT INTO o2o.tb_area (area_id, area_name, priority, create_time, last_edit_time) VALUES (2, '理工东苑', 2, null, null);
+INSERT INTO o2o.tb_person_info (user_id, name, profile_img, email, gender, enable_status, user_type, create_time, last_edit_time) VALUES (1, '测试', 'test', 'weiranyi@weiranyi.com', '1', 1, 2, null, null);
+INSERT INTO o2o.tb_shop_category (shop_category_id, shop_category_name, shop_category_desc, shop_category_img, priority, create_time, last_edit_time, parent_id) VALUES (1, '咖啡奶茶', '咖啡奶茶', 'test', 1, null, null, null);
