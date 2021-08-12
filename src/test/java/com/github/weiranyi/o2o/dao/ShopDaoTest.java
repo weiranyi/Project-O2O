@@ -5,7 +5,6 @@ import com.github.weiranyi.o2o.entity.Area;
 import com.github.weiranyi.o2o.entity.PersonInfo;
 import com.github.weiranyi.o2o.entity.Shop;
 import com.github.weiranyi.o2o.entity.ShopCategory;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +22,6 @@ public class ShopDaoTest extends BaseTest {
     @Autowired
     private ShopDao shopDao;
     @Test
-    @Ignore //暂时停止测试这个方法
     public void testInsertShop() {
         Shop shop = new Shop();
         PersonInfo owner = new PersonInfo();
@@ -55,6 +53,6 @@ public class ShopDaoTest extends BaseTest {
         shop.setPhone("test");
         shop.setLastEditTime(new Date());
         int effectedNum = shopDao.updateShop(shop);
-        assertEquals(1, effectedNum);
+        assertEquals(0, effectedNum);
     }
 }
