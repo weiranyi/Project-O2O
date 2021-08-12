@@ -1,0 +1,46 @@
+package com.github.weiranyi.o2o.web.superadmin;
+
+import com.github.weiranyi.o2o.entity.Area;
+import com.github.weiranyi.o2o.service.AreaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author https://github.com/weiranyi/
+ * @ClassName: AreaController
+ * @Description: TODO()
+ * @date 2021/8/12
+ */
+@Controller
+@RequestMapping("/superadmin")
+public class AreaController {
+    @Autowired
+    private AreaService areaService;
+
+    @RequestMapping(value = "/listareas", method = RequestMethod.GET)
+    @ResponseBody
+    private Map<String, Object> listAreas() {
+        // 存方法返回值
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        // 获取service返回的区域列表
+        List<Area> list = new ArrayList<Area>();
+        try {
+            list = areaService.getAreaList();
+            modelMap.put("row", list);
+            modelMap.put("total", list.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            modelMap.put("success", false);
+            modelMap.put("errMsg", e.toString());
+        }
+        return modelMap;
+    }
+}

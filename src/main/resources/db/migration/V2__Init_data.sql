@@ -1,0 +1,2 @@
+INSERT INTO o2o.tb_area (area_id, area_name, priority, create_time, last_edit_time) VALUES (1, '理工松林宿舍', 1, null, null);
+INSERT INTO o2o.tb_area (area_id, area_name, priority, create_time, last_edit_time) VALUES (2, '理工东苑', 2, null, null);
