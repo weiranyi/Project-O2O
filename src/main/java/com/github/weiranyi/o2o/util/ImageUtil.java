@@ -2,7 +2,6 @@ package com.github.weiranyi.o2o.util;
 
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -27,7 +26,7 @@ public class ImageUtil {
      * @param targetAddr
      * @return String
      */
-    public static String generateThumbnail(CommonsMultipartFile thumbnail, String targetAddr) {
+    public static String generateThumbnail(File thumbnail, String targetAddr) {
         String realFileName = getRandomFileName();
         String extension = getFileExtension(thumbnail);
         makeDirPath(targetAddr);
@@ -35,7 +34,7 @@ public class ImageUtil {
         File dest = new File(PathUtil.getImgBasePath() + relativeAddr);
 
         try {
-            Thumbnails.of(thumbnail.getInputStream()).size(200, 200).watermark(
+            Thumbnails.of(thumbnail).size(200, 200).watermark(
                     Positions.BOTTOM_RIGHT,  // place
                     ImageIO.read(new File(basePath + "/images/watermark/watermark.png")), // watermark
                     0.5f // pellucidity
@@ -62,11 +61,11 @@ public class ImageUtil {
     /**
      * 获取输入文件流的扩展名
      *
-     * @param thumbnail
+     * @param cFile
      * @return String
      */
-    private static String getFileExtension(CommonsMultipartFile thumbnail) {
-        String originalFileName = thumbnail.getOriginalFilename();
+    private static String getFileExtension(File cFile) {
+        String originalFileName = cFile.getName();
         return originalFileName.substring(originalFileName.lastIndexOf("."));
     }
 
