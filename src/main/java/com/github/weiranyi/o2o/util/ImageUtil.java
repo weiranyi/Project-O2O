@@ -21,13 +21,19 @@ public class ImageUtil {
     private static String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHmmss");
     private static final Random RANDOM = new Random();
-
+    /**
+     * 创建目标路径设计的目录
+     * @param thumbnail
+     * @param targetAddr
+     * @return String
+     */
     public static String generateThumbnail(CommonsMultipartFile thumbnail, String targetAddr) {
         String realFileName = getRandomFileName();
         String extension = getFileExtension(thumbnail);
         makeDirPath(targetAddr);
         String relativeAddr = targetAddr + realFileName + extension;
         File dest = new File(PathUtil.getImgBasePath() + relativeAddr);
+
         try {
             Thumbnails.of(thumbnail.getInputStream()).size(200, 200).watermark(
                     Positions.BOTTOM_RIGHT,  // place
