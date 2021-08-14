@@ -74,7 +74,7 @@ public class ImageUtil {
      *
      * @return String
      */
-    private static String getRandomFileName() {
+    public static String getRandomFileName() {
         // 10000-99999
         int rannum = RANDOM.nextInt(89999) + 10000;
         String nowTimStr = SIMPLE_DATE_FORMAT.format(new Date());

@@ -7,6 +7,7 @@ import com.github.weiranyi.o2o.entity.PersonInfo;
 import com.github.weiranyi.o2o.entity.Shop;
 import com.github.weiranyi.o2o.entity.ShopCategory;
 import com.github.weiranyi.o2o.enums.ShopStateEnum;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,7 @@ public class ShopServiceTest extends BaseTest {
     private ShopService shopService;
 
     @Test
+    @Ignore
     public void testAddShop() throws FileNotFoundException {
         Shop shop = new Shop();
         PersonInfo owner = new PersonInfo();
