@@ -2,7 +2,6 @@ package com.github.weiranyi.o2o.dao;
 
 import com.github.weiranyi.o2o.BaseTest;
 import com.github.weiranyi.o2o.entity.ShopCategory;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +14,6 @@ public class ShopCategoryDaoTest extends BaseTest {
     private ShopCategoryDao shopCategoryDao;
 
     @Test
-    @Ignore // 暂时跳过
     public void testQueryShopCategory() {
         List<ShopCategory> shopCategoryList = shopCategoryDao.queryShopCategory(new ShopCategory());
         System.out.println(shopCategoryList.size());

@@ -2,7 +2,6 @@ package com.github.weiranyi.o2o.dao;
 
 import com.github.weiranyi.o2o.BaseTest;
 import com.github.weiranyi.o2o.entity.Area;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +23,6 @@ public class AreaDaoTest extends BaseTest {
 
 
     @Test
-    @Ignore // 暂时跳过
     public void testBQueryArea() throws Exception {
         List<Area> areaList = areaDao.queryArea();
         assertEquals(2, areaList.size());

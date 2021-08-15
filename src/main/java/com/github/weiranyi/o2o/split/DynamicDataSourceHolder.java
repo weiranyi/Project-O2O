@@ -1,5 +1,6 @@
 package com.github.weiranyi.o2o.split;
 
+import com.github.weiranyi.o2o.util.OSUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +18,17 @@ public class DynamicDataSourceHolder {
     // key
     public static final String DB_MASTER = "master";
     public static final String DB_SLAVE = "slave";
+    public static final String DB_TEST = "db-test";
 
     public static String getDbType() {
         String db = contextHolder.get();
-        if (db == null) {
-            db = DB_MASTER;
+        if (OSUtil.osType.name().equals("OS_TYPE_MAC")) {
+            // 测试库
+            db = DB_TEST;
+        }else {
+            if (db == null) {
+                db = DB_MASTER;
+            }
         }
         return db;
     }

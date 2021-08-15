@@ -28,14 +28,21 @@
     <bean id="master" parent="abstractDataSource">
         <!-- 配置连接池属性 -->
         <property name="driverClass" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="jdbcUrl" value="${jdbc.master.url}"/>
         <property name="user" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
     </bean>
     <bean id="slave" parent="abstractDataSource">
         <!-- 配置连接池属性 -->
         <property name="driverClass" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="jdbcUrl" value="${jdbc.slave.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <bean id="db-test" parent="abstractDataSource">
+        <!-- 配置连接池属性 -->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.test.url}"/>
         <property name="user" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
     </bean>
@@ -45,6 +52,7 @@
             <map>
                 <entry value-ref="master" key="master"></entry>
                 <entry value-ref="slave" key="slave"></entry>
+                <entry value-ref="db-test" key="db-test"></entry>
             </map>
         </property>
     </bean>

@@ -1,5 +1,6 @@
 package com.github.weiranyi.o2o.split;
 
+import com.github.weiranyi.o2o.util.OSUtil;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.mapping.BoundSql;
@@ -70,13 +71,18 @@ public class DynamicDataSourceInterceptor implements Interceptor {
     //返回拦截对象｜代理对象
     @Override
     public Object plugin(Object target) {
-        //如果target是Exector  mybatis的SQL执行器
-        if (target instanceof Executor) {
-            // 将其交给intercept处理
-            return Plugin.wrap(target, this);
+        if (OSUtil.osType.name().equals("OS_TYPE_MAC")) {
+            // 不是就放过
+            return target;
+        } else {
+            //如果target是Exector  mybatis的SQL执行器
+            if (target instanceof Executor) {
+                // 将其交给intercept处理
+                return Plugin.wrap(target, this);
+            }
+            // 不是就放过
+            return target;
         }
-        // 不是就放过
-        return target;
     }
 
     // 类初始化时做设置

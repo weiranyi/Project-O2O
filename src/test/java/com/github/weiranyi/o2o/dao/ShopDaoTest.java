@@ -50,7 +50,6 @@ public class ShopDaoTest extends BaseTest {
     }
 
     @Test
-    @Ignore // 暂时跳过
     public void testUpdateShop() {
         Shop shop = new Shop();
         shop.setShopId(1L);
