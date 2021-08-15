@@ -3,7 +3,7 @@ package com.github.weiranyi.o2o.service;
 import com.github.weiranyi.o2o.dto.ShopExecution;
 import com.github.weiranyi.o2o.entity.Shop;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author https://github.com/weiranyi/
@@ -12,6 +12,6 @@ import java.io.File;
  * @date 2021/8/13
  */
 public interface ShopService {
-    ShopExecution addShop(Shop shop, File shopImg);
+    ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName);
 }
 

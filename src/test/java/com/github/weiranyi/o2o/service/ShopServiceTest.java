@@ -12,7 +12,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -44,7 +46,8 @@ public class ShopServiceTest extends BaseTest {
         shop.setEnableStatus(ShopStateEnum.CHECK.getState());
         shop.setAdvice("审核中");
         File shopImg = new File(basePath + "/images/imgInput/weiranyi.jpg");
-        ShopExecution shopExecution = shopService.addShop(shop, shopImg);
+        InputStream is = new FileInputStream(shopImg);
+        ShopExecution shopExecution = shopService.addShop(shop, is, shopImg.getName());
         assertEquals(ShopStateEnum.CHECK.getState(), shopExecution.getState());
     }
 }

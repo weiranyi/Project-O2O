@@ -6,6 +6,7 @@ import net.coobird.thumbnailator.geometry.Positions;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -20,21 +21,24 @@ public class ImageUtil {
     private static String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHmmss");
     private static final Random RANDOM = new Random();
+
     /**
      * 创建目标路径设计的目录
-     * @param thumbnail
+     *
+     * @param thumbnailInputStream
      * @param targetAddr
+     * @param fileName
      * @return String
      */
-    public static String generateThumbnail(File thumbnail, String targetAddr) {
+    public static String generateThumbnail(InputStream thumbnailInputStream, String fileName, String targetAddr) {
         String realFileName = getRandomFileName();
-        String extension = getFileExtension(thumbnail);
+        String extension = getFileExtension(fileName);
         makeDirPath(targetAddr);
         String relativeAddr = targetAddr + realFileName + extension;
         File dest = new File(PathUtil.getImgBasePath() + relativeAddr);
 
         try {
-            Thumbnails.of(thumbnail).size(200, 200).watermark(
+            Thumbnails.of(thumbnailInputStream).size(200, 200).watermark(
                     Positions.BOTTOM_RIGHT,  // place
                     ImageIO.read(new File(basePath + "/images/watermark/watermark.png")), // watermark
                     0.5f // pellucidity
@@ -61,12 +65,11 @@ public class ImageUtil {
     /**
      * 获取输入文件流的扩展名
      *
-     * @param cFile
+     * @param fileName
      * @return String
      */
-    private static String getFileExtension(File cFile) {
-        String originalFileName = cFile.getName();
-        return originalFileName.substring(originalFileName.lastIndexOf("."));
+    private static String getFileExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 
     /**
