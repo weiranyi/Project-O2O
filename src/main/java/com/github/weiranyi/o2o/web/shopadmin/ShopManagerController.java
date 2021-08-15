@@ -135,29 +135,4 @@ public class ShopManagerController {
         }
         //3、返回结果
     }
-
-//    private static void inputStreamToFile(InputStream inputStream, File file) {
-//        FileOutputStream os = null;
-//        try {
-//            os = new FileOutputStream(file);
-//            int bytesRead = 0;
-//            byte[] buffer = new byte[1024];
-//            while ((bytesRead = inputStream.read(buffer)) > 0) {
-//                os.write(buffer, 0, bytesRead);
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException("调用inputStreamToFile产生异常：" + e.getMessage());
-//        } finally {
-//            try {
-//                if (os != null) {
-//                    os.close();
-//                }
-//                if (inputStream != null) {
-//                    inputStream.close();
-//                }
-//            } catch (IOException e) {
-//                throw new RuntimeException("调用inputStreamToFile产生异常：" + e.getMessage());
-//            }
-//        }
-//    }
 }

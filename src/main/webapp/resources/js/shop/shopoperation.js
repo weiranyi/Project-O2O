@@ -9,7 +9,7 @@ $(function () {
     getShopInitInfo(); //调用方法
     // 定义第一个方法getShopInitInfo：获取商铺分类、区域的列表信息
     function getShopInitInfo() {
-        alert(initUrl); //调试弹窗，证明js文件被加载
+        // alert(initUrl); //调试弹窗，证明js文件被加载
         $.getJSON(initUrl, function (data) { //访问的URL，回调方法
             if (data.success) { //true
                 var tempHtml = '';//存放店铺类别列表
@@ -50,6 +50,12 @@ $(function () {
             var formData = new FormData(); //定义表单，用于接收
             formData.append('shopImg', shopImg);
             formData.append('shopStr', JSON.stringify(shop)); //将json转换成字符流
+            var verifyCodeActual = $('#j_kaptcha').val();
+            if(!verifyCodeActual){
+                $.toast('请输入验证码！');
+                return;
+            }
+            formData.append('verifyCodeActual',verifyCodeActual)
             $.ajax({
                 url: registerShopUrl,
                 type: 'POST',
@@ -63,6 +69,7 @@ $(function () {
                     } else {
                         $.toast("提交失败：" + data.errMsg);
                     }
+                    $('#keptcha_img').click()
                 }
             });
         });
