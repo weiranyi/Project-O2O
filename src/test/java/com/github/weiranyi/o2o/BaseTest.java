@@ -1,5 +1,6 @@
 package com.github.weiranyi.o2o;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
         "classpath:spring/spring-service.xml" })
 public class BaseTest {
     @Test
+    @Ignore // 暂时跳过
     public void test(){
 
     }

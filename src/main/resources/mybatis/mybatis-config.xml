@@ -14,4 +14,7 @@
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings>
+    <plugins>
+        <plugin interceptor="com.github.weiranyi.o2o.split.DynamicDataSourceInterceptor"></plugin>
+    </plugins>
 </configuration>
