@@ -18,7 +18,8 @@ public class OSUtil {
         } else if (osName.contains("Mac")) {
             return OSType.OS_TYPE_MAC;
         } else {
-            return OSType.OS_TYPE_LINUX;
+            // 暂时将OS_TYPE_LINUX改为OS_TYPE_MAC，便于测试开发
+            return OSType.OS_TYPE_MAC;
         }
     }
 
