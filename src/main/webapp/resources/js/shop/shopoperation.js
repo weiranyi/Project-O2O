@@ -69,7 +69,7 @@ $(function () {
                     } else {
                         $.toast("提交失败：" + data.errMsg);
                     }
-                    $('#keptcha_img').click()
+                    $('#kaptcha_img').click()
                 }
             });
         });
