@@ -11,6 +11,7 @@ import com.github.weiranyi.o2o.exceptions.ShopOperationException;
 import com.github.weiranyi.o2o.service.AreaService;
 import com.github.weiranyi.o2o.service.ShopCategoryService;
 import com.github.weiranyi.o2o.service.ShopService;
+import com.github.weiranyi.o2o.util.CodeUtil;
 import com.github.weiranyi.o2o.util.HttpServletRequestUtil;
 import com.github.weiranyi.o2o.util.ImageUtil;
 import com.github.weiranyi.o2o.util.PathUtil;
@@ -70,9 +71,13 @@ public class ShopManagerController {
     @RequestMapping(value = "/registershop", method = RequestMethod.POST)
     @ResponseBody
     private Map<String, Object> registerShop(HttpServletRequest request) {
-
         //定义一个返回值
         Map<String, Object> modelMap = new HashMap<String, Object>();
+        if (!CodeUtil.checkVerifyCode(request)) {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", "验证码输入错误！！！");
+            return modelMap;
+        }
         //1.接收并转换相应的参数，包括店铺信息以及图片信息
         //获取请求头的店铺信息
         String shopStr = HttpServletRequestUtil.getString(request, "shopStr");
@@ -126,13 +131,14 @@ public class ShopManagerController {
             } catch (IOException e) {
                 modelMap.put("success", false);
                 modelMap.put("errMsg", e.getMessage());
+                return modelMap;
             }
-            return modelMap;
         } else {
             modelMap.put("success", false);
             modelMap.put("errMsg", "请输入店铺信息");
-            return modelMap;
         }
         //3、返回结果
+        return modelMap;
     }
+
 }
