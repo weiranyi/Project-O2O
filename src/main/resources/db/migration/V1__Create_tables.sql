@@ -138,7 +138,7 @@ CREATE TABLE `tb_product_category`
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4;
 
--- 店铺表
+-- 商品表
 CREATE TABLE `tb_product`
 (
     `product_id`          int(100)     NOT NULL AUTO_INCREMENT,
