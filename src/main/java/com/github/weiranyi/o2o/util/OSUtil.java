@@ -19,7 +19,7 @@ public class OSUtil {
             return OSType.OS_TYPE_MAC;
         } else {
             // 暂时将OS_TYPE_LINUX改为OS_TYPE_MAC，便于测试开发
-            return OSType.OS_TYPE_MAC;
+            return OSType.OS_TYPE_LINUX;
         }
     }
 

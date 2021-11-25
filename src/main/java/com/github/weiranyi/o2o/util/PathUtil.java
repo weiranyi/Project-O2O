@@ -3,7 +3,7 @@ package com.github.weiranyi.o2o.util;
 /**
  * @author https://github.com/weiranyi/
  * @ClassName: PathUtil
- * @Description: TODO()
+ * @Description:
  * @date 2021/8/13
  */
 public class PathUtil {

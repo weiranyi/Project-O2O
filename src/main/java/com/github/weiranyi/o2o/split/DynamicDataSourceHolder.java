@@ -22,7 +22,7 @@ public class DynamicDataSourceHolder {
 
     public static String getDbType() {
         String db = contextHolder.get();
-        if (OSUtil.osType.name().equals("OS_TYPE_MAC")) {
+        if (OSUtil.osType.name().equals("OS_TYPE_LINUX")) {
             // 测试库
             db = DB_TEST;
         }else {

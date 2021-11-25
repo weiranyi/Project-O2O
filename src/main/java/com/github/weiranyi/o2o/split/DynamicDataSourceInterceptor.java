@@ -22,9 +22,12 @@ import java.util.Properties;
  * @Description: TODO()
  * @date 2021/8/15
  */
-@Intercepts({@Signature(type = Executor.class, method = "updata", args = {MappedStatement.class, Object.class}),
+
+@Intercepts({
+        @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class,
-                Object.class, RowBounds.class, ResultHandler.class})})
+                Object.class, RowBounds.class, ResultHandler.class})
+})
 public class DynamicDataSourceInterceptor implements Interceptor {
     // 配置日志
     private static Logger logger = LoggerFactory.getLogger(DynamicDataSourceInterceptor.class);
