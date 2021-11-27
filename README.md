@@ -1,3 +1,8 @@
+- 展示
+  - 店铺注册：http://localhost:8080/O2O/shopadmin/shopoperation
+  - 店铺编辑：
+    - 得到返回：http://localhost:8080/O2O/shopadmin/getshopbyid?shopid=1
+    - 编辑店铺的页面：http://127.0.0.1:8080/O2O/shopadmin/shopoperation?shopId=1
 - 收获：
     - SpringMVC：DispatcherServlet：
         - DispatcherServlet：是整个SpringMVC框架中最为核心的一块，它主要用来拦截符合要求的外部请求，并把请求分发到不同的控制器中去，根据控制器处理后的结果生成相应的响应发送到客户端。

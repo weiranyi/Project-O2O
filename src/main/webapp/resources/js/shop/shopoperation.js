@@ -3,10 +3,46 @@
  * 2、获取表单信息给后台
  */
 $(function () {
+
+    //从请求的URL中匹配到shopId
+    var shopId = getQueryString('shopId');
+    //定义一个变量，用来传递状态：传递店铺，默认对店铺进行更新；不传，默认注册店铺
+    var isEdit = shopId?true:false;
+
     var initUrl = '/O2O/shopadmin/getshopinitinfo'; //获取店铺的初始信息，还未定义
     var registerShopUrl = '/O2O/shopadmin/registershop'; //注册店铺
+    var shopInfoUrl = '/O2O/shopadmin/getshopbyid?shopid=' + shopId;
+    var editShopUrl = '/O2O/shopadmin/modifyshop';
 
-    getShopInitInfo(); //调用方法
+    if(!isEdit){
+        getShopInitInfo();//没有shopId就是注册，调用初始化
+    }else{
+        getShopInfo(shopId);//有shopId就是修改，查询店铺信息
+    }
+
+    function getShopInfo(shopId){
+        $.getJSON(shopInfoUrl,function(data){
+            if(data.success){
+                var shop = data.shop;
+                $('#shop-name').val(shop.shopName);
+                $('#shop-addr').val(shop.shopAddr);
+                $('#shop-phone').val(shop.phone);
+                $('#shop-desc').val(shop.shopDesc);
+                var shopCategory = '<option data-id="'
+                    + shop.shopCategory.shopCategoryId + '" selected>'
+                    + shop.shopCategory.shopCategoryName + '</option>';
+                var tempAreaHtml = '';
+                data.areaList.map(function(item, index){
+                    tempAreaHtml += '<option data-id="' + item.areaId +'">'
+                        +item.areaName + '</option>';
+                });
+                $('#shop-category').html(shopCategory);
+                $('#shop-category').attr('disabled','disabled');
+                $('#area').html(tempAreaHtml);
+                $('#area option[data-id="'+shop.area.areaId+'"]').attr("selected", "selected");
+            }
+        });
+    }
     // 定义第一个方法getShopInitInfo：获取商铺分类、区域的列表信息
     function getShopInitInfo() {
         // alert(initUrl); //调试弹窗，证明js文件被加载
@@ -57,7 +93,7 @@ $(function () {
             }
             formData.append('verifyCodeActual',verifyCodeActual)
             $.ajax({
-                url: registerShopUrl,
+                url: (isEdit ? editShopUrl:registerShopUrl),
                 type: 'POST',
                 data: formData,
                 contentType: false,//既要传文件，又要传文字，设为false

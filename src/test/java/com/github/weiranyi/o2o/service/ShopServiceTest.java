@@ -7,6 +7,7 @@ import com.github.weiranyi.o2o.entity.PersonInfo;
 import com.github.weiranyi.o2o.entity.Shop;
 import com.github.weiranyi.o2o.entity.ShopCategory;
 import com.github.weiranyi.o2o.enums.ShopStateEnum;
+import com.github.weiranyi.o2o.exceptions.ShopOperationException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,17 @@ public class ShopServiceTest extends BaseTest {
     private static String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
     @Autowired
     private ShopService shopService;
+
+    @Test
+    @Ignore
+    public void testModifyShop() throws ShopOperationException, FileNotFoundException {
+        Shop shop = new Shop();
+        shop.setShopId(1L);
+        shop.setShopName("修改后的店铺名称");
+        InputStream is = new FileInputStream("E:\\cdut\\ssm\\Project-O2O\\src\\main\\resources\\images\\watermark\\watermark.png");
+        ShopExecution shopExecution = shopService.modifyShop(shop, is, "watermark.png");
+        System.out.println("新的图片地址：" + shopExecution.getShop().getShopImg());
+    }
 
     @Test
     @Ignore

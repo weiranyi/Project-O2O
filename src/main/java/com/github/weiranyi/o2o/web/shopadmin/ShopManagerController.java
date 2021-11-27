@@ -13,8 +13,6 @@ import com.github.weiranyi.o2o.service.ShopCategoryService;
 import com.github.weiranyi.o2o.service.ShopService;
 import com.github.weiranyi.o2o.util.CodeUtil;
 import com.github.weiranyi.o2o.util.HttpServletRequestUtil;
-import com.github.weiranyi.o2o.util.ImageUtil;
-import com.github.weiranyi.o2o.util.PathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +23,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +45,99 @@ public class ShopManagerController {
     @Autowired
     private AreaService areaService;
 
-    @RequestMapping(value = "getshopinitinfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/modifyshop", method = RequestMethod.POST)
+    @ResponseBody
+    private Map<String, Object> modifyShop(HttpServletRequest request) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        //1.验证码校验
+        if (!CodeUtil.checkVerifyCode(request)) {
+            modelMap.put("success", "false");
+            modelMap.put("message", "输入了错误的验证码");
+            return modelMap;
+        }
+
+        //2.获取请求头的店铺信息 接收从前台传递的shopStr对象，将这个对象转换成Shop实体类
+        String shopStr = HttpServletRequestUtil.getString(request, "shopStr");
+        ObjectMapper mapper = new ObjectMapper();
+        Shop shop = null;
+        try {
+            shop = mapper.readValue(shopStr, Shop.class);
+        } catch (Exception e) {
+            modelMap.put("success", false);
+            modelMap.put("errMeg", e.getMessage());
+            return modelMap;
+        }
+        // 3.获取图片 将请求中的文件流从CommonsMultipartResolver解析为CommonsMultipartFile
+        CommonsMultipartFile shopImg = null;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(
+                request.getSession().getServletContext());
+        if (commonsMultipartResolver.isMultipart(request)) {
+            MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
+            shopImg = (CommonsMultipartFile) multipartHttpServletRequest.getFile("shopImg");
+        }
+
+        // 2.修改店铺
+        if (shop != null && shop.getShopId() != null) {
+            //由于图片是可上传、可不上传的，因此图片非空判断去除；取而代之确保shopId不为空
+            //修改店铺信息不用从session获取用户信息
+            PersonInfo owner = new PersonInfo();
+            // 预期从Session获取，目前自定义，以后完善
+            owner.setUserId(1L);
+            shop.setOwner(owner);
+            // 由于addShop的第二个参数是File类型的，而传入的ShopImg是CommonsMultipartFile这样的一个类型，因此需要将CommonsMultipartFile转换成File类型
+            ShopExecution se;
+            try {
+                if (shopImg == null) {
+                    se = shopService.modifyShop(shop, null, null);
+                } else {
+                    se = shopService.modifyShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
+                }
+                if (se.getState() == ShopStateEnum.SUCCESS.getState()) {
+                    modelMap.put("success", true);
+                } else {
+                    modelMap.put("success", false);
+                    modelMap.put("errMsg", se.getStateInfo());
+                }
+            } catch (ShopOperationException e) {
+                modelMap.put("success", false);
+                modelMap.put("errMsg", e.getMessage());
+            } catch (IOException e) {
+                modelMap.put("success", false);
+                modelMap.put("errMsg", e.getMessage());
+            }
+            return modelMap;
+        } else {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", "请输入店铺Id");
+            return modelMap;
+        }
+
+    }
+
+    @RequestMapping(value = "/getshopbyid", method = RequestMethod.GET)
+    @ResponseBody
+    private Map<String, Object> getShopById(HttpServletRequest request) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        Long shopId = HttpServletRequestUtil.getLong(request, "shopid");
+        if (shopId > -1) {
+            try {
+                Shop shop = shopService.getByShopId(shopId);
+                List<Area> areaList = areaService.getAreaList();
+                modelMap.put("shop", shop);
+                modelMap.put("areaList", areaList);
+                modelMap.put("success", true);
+            } catch (Exception e) {
+                modelMap.put("success", false);
+                modelMap.put("errMsg", e.toString());
+            }
+        } else {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", "empty shopId");
+        }
+        return modelMap;
+    }
+
+    @RequestMapping(value = "/getshopinitinfo", method = RequestMethod.GET)
     @ResponseBody
     private Map<String, Object> getShopInitInfo(HttpServletRequest request) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -108,37 +197,48 @@ public class ShopManagerController {
             return modelMap;
         }
         //2.注册店铺
+        // 4.注册店铺
         if (shop != null && shopImg != null) {
-            PersonInfo owner = new PersonInfo();
-            //预期从Session获取，目前自定义，以后完善
-            owner.setUserId(1L);
+            /*
+             * 添加Session
+             * 注册店铺或对店铺做操作，是需要登陆的
+             */
+            PersonInfo owner = (PersonInfo) request.getSession().getAttribute("user");
             shop.setOwner(owner);
-            //由于addShop的第二个参数是File类型的，而传入的ShopImg是CommonsMultipartFile这样的一个类型，因此需要将CommonsMultipartFile转换成File类型
-            File shopImgFile = new File(PathUtil.getImgBasePath() + ImageUtil.getRandomFileName());
-            //注册店铺
-            ShopExecution se = null;
+
+            ShopExecution se;
             try {
                 se = shopService.addShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
                 if (se.getState() == ShopStateEnum.CHECK.getState()) {
+                    /*
+                     * 在店铺添加完成后，还需要做Session的操作。用户和店铺的关系是一对多的，即一个owner能够创建多个店铺。
+                     * 因此需要在Session里面保存一个店铺列表来显示用户可以操作的店铺。
+                     */
+                    @SuppressWarnings("unchecked")
+                    List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
+                    if (shopList == null || shopList.size() == 0) {
+                        shopList = new ArrayList<Shop>();
+                    }
+                    shopList.add(se.getShop());
+                    request.getSession().setAttribute("shopList", shopList);
                     modelMap.put("success", true);
                 } else {
                     modelMap.put("success", false);
                     modelMap.put("errMsg", se.getStateInfo());
                 }
+
             } catch (ShopOperationException e) {
                 modelMap.put("success", false);
                 modelMap.put("errMsg", e.getMessage());
             } catch (IOException e) {
                 modelMap.put("success", false);
                 modelMap.put("errMsg", e.getMessage());
-                return modelMap;
             }
+            return modelMap;
         } else {
             modelMap.put("success", false);
             modelMap.put("errMsg", "请输入店铺信息");
+            return modelMap;
         }
-        //3、返回结果
-        return modelMap;
     }
-
 }
